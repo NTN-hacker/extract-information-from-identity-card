@@ -2,6 +2,8 @@ import uvicorn
 from fastapi import FastAPI, File, UploadFile
 from starlette.responses import RedirectResponse
 from serve.serve_model import *
+import json
+import requests
 
 app_desc = """<h2>Try this app by uploading any image with `predict/image`</h2>"""
 
@@ -19,10 +21,17 @@ async def predict_api(file: UploadFile = File(...)):
     if not extension:
         return "Image must be jpg or png format!"
 
-    image = read_image_file(await file.read())
-    prediction = predict(image)
+    url = 'https://api.fpt.ai/vision/idr/vnm'
 
-    return prediction
+    files = {'image': open('samples/' + file.filename, 'rb').read()}
+    headers = {
+        'api-key': 'Y13Ab2Z2mitNJz5vVIrYWCt3AKbOzExw'
+    }
+
+    response = requests.post(url, files=files, headers=headers)
+    result = json.loads(response.text)                      
+
+    return result
 
 
 if __name__ == "__main__":

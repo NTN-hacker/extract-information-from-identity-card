@@ -1,5 +1,7 @@
-from io import BytesIO
+from io import BytesIO, TextIOWrapper
 import numpy as np
+import json
+import requests
 from PIL import Image
 from src.merged_model import CompletedModel
 
@@ -11,15 +13,13 @@ def load_model():
     return model
 
 
-def predict(image: Image.Image):
-    global model
-    if model is None:
-        model = load_model()
-
-    img = np.asarray(image)
-    result = model.predict(img)
-
-    return result
+# def predict(image: Image.Image):
+#     global model
+#     if model is None:
+#         model = load_model()
+#     img = np.asarray(image)
+#     result = model.predict(img)
+#     return result
 
 
 def read_image_file(file) -> Image.Image:
